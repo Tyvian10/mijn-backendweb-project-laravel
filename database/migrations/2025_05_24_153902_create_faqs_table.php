@@ -10,6 +10,7 @@ return new class extends Migration
 {
     Schema::create('faqs', function (Blueprint $table) {
         $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade'); //foreign key
         $table->string('vraag');
         $table->text('antwoord');
         $table->timestamps();
