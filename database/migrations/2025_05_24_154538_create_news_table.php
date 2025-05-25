@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); //foreign key
-            $table->string('vraag');
-            $table->string('antwoord');
+            $table->string('Title');
+            $table->text('nieuwsbericht');
             $table->timestamps();
         });
     }
