@@ -9,6 +9,12 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -23,6 +29,7 @@ class User extends Authenticatable
         'password',
     ];
 
+    
     /**
      * The attributes that should be hidden for serialization.
      *

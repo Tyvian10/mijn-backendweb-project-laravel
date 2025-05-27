@@ -9,19 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('contacts', function (Blueprint $table) {
-            
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); //foreign key
-            $table->text('formulier');
-            
-
-
-            $table->timestamps();
-        });
-    }
+    public function up()
+{
+    Schema::create('contacts', function (Blueprint $table) {
+        $table->id();
+        $table->string('naam');
+        $table->string('email');
+        $table->text('bericht');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

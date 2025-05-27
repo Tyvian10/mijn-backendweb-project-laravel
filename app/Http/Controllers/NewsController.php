@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -20,18 +21,18 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'titel' => 'required|string|max:255',
-            'nieuwsbericht' => 'required|string',
+        $validated = $request->validate([
+            'titel' => 'required|min:3|max:255',
+            'nieuwsbericht' => 'required|min:5',
         ]);
 
-        $news = new News();
-        $news->titel = $request->titel;
-        $news->nieuwsbericht = $request->nieuwsbericht;
-        $news->user_id = auth()->id(); // alleen als je authenticatie gebruikt
-        $news->save();
+        News::create([
+            'titel' => $validated['titel'],
+            'nieuwsbericht' => $validated['nieuwsbericht'],
+            'user_id' => Auth::id(), // Zorgt dat het een ingelogde user is
+        ]);
 
-        return redirect()->route('news.index')->with('success', 'Nieuwsbericht aangemaakt!');
+        return redirect()->route('news.index')->with('success', 'Nieuwsbericht succesvol toegevoegd!');
     }
 
     public function show(News $news)
@@ -46,12 +47,12 @@ class NewsController extends Controller
 
     public function update(Request $request, News $news)
     {
-        $request->validate([
-            'titel' => 'required|string|max:255',
-            'nieuwsbericht' => 'required|string',
+        $validated = $request->validate([
+            'titel' => 'required|min:3|max:255',
+            'nieuwsbericht' => 'required|min:5',
         ]);
 
-        $news->update($request->only('titel', 'nieuwsbericht'));
+        $news->update($validated);
 
         return redirect()->route('news.index')->with('success', 'Nieuwsbericht bijgewerkt!');
     }
