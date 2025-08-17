@@ -2,63 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Afficher le formulaire de contact (public)
     public function create()
     {
-        //
+        return view('contacts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Sauvegarder le message de contact (public)
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string|min:10',
+        ]);
+
+        // Créer le message de contact
+        Contact::create([
+            'formulier' => json_encode([
+                'nom' => $request->nom,
+                'email' => $request->email,
+                'message' => $request->message,
+                'date' => now()
+            ]),
+            'user_id' => auth()->id() ?? null, // null si pas connecté
+        ]);
+
+        return redirect()->route('contact.create')
+            ->with('success', 'Votre message a été envoyé avec succès!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Page admin pour voir tous les messages (admin seulement)
+    public function adminIndex()
     {
-        //
+        $contacts = Contact::latest()->get();
+        return view('contacts.admin', compact('contacts'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Afficher un message spécifique (admin seulement)
+    public function show(Contact $contact)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('contacts.show', compact('contact'));
     }
 }

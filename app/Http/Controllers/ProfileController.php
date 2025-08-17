@@ -2,59 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    // Afficher le profil public d'un utilisateur
+    public function show(User $user)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return view('profiles.show', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    // Éditer son propre profil
+    public function edit()
     {
-        $request->user()->fill($request->validated());
+        $user = auth()->user();
+        return view('profiles.edit', compact('user'));
+    }
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    // Mettre à jour son propre profil
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'profielfoto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $data = $request->only('name', 'email');
+
+        // Gérer l'upload de photo
+        if ($request->hasFile('profielfoto')) {
+            // Supprimer l'ancienne photo si elle existe
+            if ($user->profielfoto) {
+                Storage::disk('public')->delete($user->profielfoto);
+            }
+            
+            // Sauvegarder la nouvelle photo
+            $data['profielfoto'] = $request->file('profielfoto')->store('profiles', 'public');
         }
 
-        $request->user()->save();
+        $user->update($data);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.edit')
+            ->with('success', 'Profil mis à jour avec succès!');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    // Page admin pour gérer les utilisateurs (admin seulement)
+    public function adminIndex()
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $users = User::all();
+        return view('admin.users', compact('users'));
+    }
+
+    // Changer le rôle d'un utilisateur (admin seulement)
+    public function updateRole(Request $request, User $user)
+    {
+        $request->validate([
+            'role' => 'required|in:user,admin'
         ]);
 
-        $user = $request->user();
+        $user->update(['role' => $request->role]);
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('admin.users')
+            ->with('success', 'Rôle de l\'utilisateur modifié avec succès!');
     }
 }
