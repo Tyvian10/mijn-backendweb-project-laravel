@@ -14,6 +14,11 @@ Route::get('/', function () {
 // Routes d'authentification (ajoutées automatiquement par Breeze)
 require __DIR__.'/auth.php';
 
+// Dashboard après connexion
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 // Routes publiques (accessibles à tous les visiteurs)
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
