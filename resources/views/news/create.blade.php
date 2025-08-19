@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <form action="{{ route('news.store') }}" method="POST">
+        <form action="{{ route('admin.news.store') }}" method="POST">
                 @csrf
                 <div>
                     <label for="titel">Titel:</label>

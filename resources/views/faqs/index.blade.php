@@ -9,12 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @auth
                 @if(auth()->user()->isAdmin())
-                    <a href="{{ route('admin.faqs.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">
-                        Ajouter une FAQ
-                    </a>
+                    <div class="mb-6">
+                        <a href="{{ route('admin.faqs.create') }}" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 ease-in-out transform hover:scale-105">
+                            ➕ Ajouter une nouvelle FAQ
+                        </a>
+                    </div>
                 @endif
             @endauth
-
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @if($faqs->count() > 0)
