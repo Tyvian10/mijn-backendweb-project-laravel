@@ -36,11 +36,19 @@ Route::middleware('auth')->group(function () {
 
 // Routes réservées aux administrateurs uniquement
 Route::middleware(['auth', 'admin'])->group(function () {
-    // Gestion des actualités (CRUD complet)
-    Route::resource('admin/news', NewsController::class)->except(['index', 'show']);
+    // Gestion des actualités (CRUD complet pour admin)
+    Route::get('/admin/news/create', [NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/admin/news', [NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/admin/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
     
-    // Gestion des FAQ (CRUD complet)  
-    Route::resource('admin/faqs', FAQController::class)->except(['index']);
+    // Gestion des FAQ (CRUD complet pour admin)
+    Route::get('/admin/faqs/create', [FAQController::class, 'create'])->name('admin.faqs.create');
+    Route::post('/admin/faqs', [FAQController::class, 'store'])->name('admin.faqs.store');
+    Route::get('/admin/faqs/{faq}/edit', [FAQController::class, 'edit'])->name('admin.faqs.edit');
+    Route::put('/admin/faqs/{faq}', [FAQController::class, 'update'])->name('admin.faqs.update');
+    Route::delete('/admin/faqs/{faq}', [FAQController::class, 'destroy'])->name('admin.faqs.destroy');
     
     // Gestion des utilisateurs
     Route::get('/admin/users', [ProfileController::class, 'adminIndex'])->name('admin.users');
