@@ -17,11 +17,11 @@
                 <div class="mb-4 p-4 bg-white dark:bg-gray-700 rounded shadow">
                     <h2 class="text-lg font-bold">{{ $item->titel }}</h2>
                     <p>{{ $item->nieuwsbericht }}</p>
-                    <a href="{{ route('news.show', $item->id) }}">Bekijk</a>
-                    
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            | <a href="{{ route('admin.news.edit', $item->id) }}" class="text-blue-600">Bewerk</a>
+                    <a href="{{ route('news.show', $item) }}" class="text-blue-600 hover:text-blue-800">Bekijk</a>
+
+@auth
+    @if(auth()->user()->isAdmin())
+        | <a href="{{ route('admin.news.edit', $item) }}" class="text-blue-600 hover:text-blue-800">Bewerk</a>
                             <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
