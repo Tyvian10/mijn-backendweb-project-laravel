@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
 
 // Routes réservées aux administrateurs uniquement
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin/users/create', [ProfileController::class, 'create'])->name('admin.users.create');
+    Route::post('/admin/users', [ProfileController::class, 'store'])->name('admin.users.store');
     // Gestion des actualités (CRUD complet pour admin)
     Route::get('/admin/news/create', [NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/admin/news', [NewsController::class, 'store'])->name('admin.news.store');

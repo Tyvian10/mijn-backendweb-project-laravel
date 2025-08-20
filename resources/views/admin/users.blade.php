@@ -17,6 +17,13 @@
                         </div>
                     @endif
 
+                    <div class="mb-4">
+                        <a href="{{ route('admin.users.create') }}" 
+                            class="bg-gray-500 text-white px-4 py-2 rounded">
+                            Créer un nouvel utilisateur
+                        </a>
+                    </div>
+
                     <div class="space-y-4">
                         @foreach($users as $user)
                             <div class="flex items-center justify-between p-4 border rounded">
