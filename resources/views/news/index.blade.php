@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @auth
                 @if(auth()->user()->isAdmin())
-                    <a href="{{ route('admin.news.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Nieuw Bericht</a>
+                    <a href="{{ route('admin.news.create') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Nieuw Bericht</a>
                 @endif
             @endauth
             
