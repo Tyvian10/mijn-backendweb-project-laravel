@@ -30,6 +30,12 @@
     </x-nav-link>
 
     @auth
+    <x-nav-link :href="route('profile.show', auth()->user())" :active="request()->routeIs('profile.*')">
+        {{ __('Mon Profil') }}
+    </x-nav-link>
+    @endauth
+
+    @auth
     @if(auth()->user()->isAdmin())
         <div class="relative inline-flex items-center" x-data="{ open: false }">
             <button @click="open = ! open" 

@@ -44,6 +44,47 @@
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <div class="mb-4">
+    <label for="verjaardag" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date d'anniversaire</label>
+    <input type="date" 
+           name="verjaardag" 
+           id="verjaardag" 
+           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+           value="{{ old('verjaardag', $user->verjaardag) }}">
+    @error('verjaardag')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
+<div class="mb-4">
+    <label for="over_mij" class="block text-sm font-medium text-gray-700 dark:text-gray-300">À propos de moi</label>
+    <textarea name="over_mij" 
+              id="over_mij" 
+              rows="4"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="Parlez-nous un peu de vous...">{{ old('over_mij', $user->over_mij) }}</textarea>
+    @error('over_mij')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
+<div class="mb-4">
+    <label for="profielfoto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo de profil</label>
+    @if($user->profielfoto)
+        <div class="mb-2">
+            <img src="{{ Storage::url($user->profielfoto) }}" alt="Photo actuelle" class="w-20 h-20 rounded-full object-cover">
+        </div>
+    @endif
+    <input type="file" 
+           name="profielfoto" 
+           id="profielfoto" 
+           accept="image/*"
+           class="mt-1 block w-full">
+    @error('profielfoto')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
                         
                         <div class="flex justify-between">
                             <a href="{{ route('profile.show', $user) }}" 

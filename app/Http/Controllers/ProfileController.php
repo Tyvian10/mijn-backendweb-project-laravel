@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
+
 class ProfileController extends Controller
 {
     // Afficher le profil public d'un utilisateur
@@ -22,35 +23,33 @@ class ProfileController extends Controller
         return view('profiles.edit', compact('user'));
     }
 
-    // Mettre à jour son propre profil
     public function update(Request $request)
-    {
-        $user = auth()->user();
-        
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'profielfoto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $user = auth()->user();
+    
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'verjaardag' => 'nullable|date',
+        'over_mij' => 'nullable|string|max:1000',
+        'profielfoto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        $data = $request->only('name', 'email');
+    $data = $request->only('name', 'email', 'verjaardag', 'over_mij');
 
-        // Gérer l'upload de photo
-        if ($request->hasFile('profielfoto')) {
-            // Supprimer l'ancienne photo si elle existe
-            if ($user->profielfoto) {
-                Storage::disk('public')->delete($user->profielfoto);
-            }
-            
-            // Sauvegarder la nouvelle photo
-            $data['profielfoto'] = $request->file('profielfoto')->store('profiles', 'public');
+    // Gérer l'upload de photo
+    if ($request->hasFile('profielfoto')) {
+        if ($user->profielfoto) {
+            Storage::disk('public')->delete($user->profielfoto);
         }
-
-        $user->update($data);
-
-        return redirect()->route('profile.edit')
-            ->with('success', 'Profil mis à jour avec succès!');
+        $data['profielfoto'] = $request->file('profielfoto')->store('profiles', 'public');
     }
+
+    $user->update($data);
+
+    return redirect()->route('profile.edit')
+        ->with('success', 'Profil mis à jour avec succès!');
+}
 
     // Page admin pour gérer les utilisateurs (admin seulement)
     public function adminIndex()
