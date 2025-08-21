@@ -34,7 +34,7 @@
                         
                         <div class="flex justify-between">
                             <a href="{{ route('faqs.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Annuler</a>
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Mettre à jour</button>
+                            <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded">Mettre à jour</button>
                         </div>
                     </form>
                 </div>

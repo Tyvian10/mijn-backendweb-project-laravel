@@ -8,10 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 
-// Page d'accueil publique
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProfileController::class, 'welcome'])->name('welcome');
 
 // Routes d'authentification (ajoutées automatiquement par Breeze)
 require __DIR__.'/auth.php';

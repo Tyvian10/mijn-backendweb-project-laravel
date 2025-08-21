@@ -10,11 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    // Afficher le profil public d'un utilisateur
-    public function show(User $user)
-    {
-        return view('profiles.show', compact('user'));
+        // Ajoute cette méthode dans ProfileController
+public function welcome()
+{
+    $users = User::take(6)->get(); // Récupère 6 utilisateurs
+    return view('welcome', compact('users'));
+}
+public function show($userId)
+{
+    $user = User::find($userId);
+    
+    if (!$user) {
+        abort(404, 'Utilisateur non trouvé');
     }
+    
+    return view('profiles.show', compact('user'));
+}
 
     // Éditer son propre profil
     public function edit()
@@ -27,6 +38,8 @@ class ProfileController extends Controller
 {
     $user = auth()->user();
     
+    
+
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users,email,' . $user->id,
@@ -98,4 +111,5 @@ public function store(Request $request)
     return redirect()->route('admin.users')
         ->with('success', 'Utilisateur créé avec succès!');
 }
+
 }

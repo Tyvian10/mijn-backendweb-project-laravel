@@ -15,7 +15,7 @@
                             Ajouter une FAQ
                         </a>
                         <a href="{{ route('admin.categories.index') }}" 
-                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                           class="bg-gray-500 text-white px-4 py-2 rounded">
                             Gérer les catégories
                         </a>
                     </div>
