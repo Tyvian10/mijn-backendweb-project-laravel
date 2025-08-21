@@ -15,6 +15,7 @@ class FAQ extends Model
         'vraag',
         'antwoord', 
         'user_id',
+        'category_id',
     ];
 
     // Relation vers User
@@ -22,4 +23,9 @@ class FAQ extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 }

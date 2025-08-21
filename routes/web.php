@@ -1,10 +1,12 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FAQController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 
 // Page d'accueil publique
 Route::get('/', function () {
@@ -25,20 +27,23 @@ Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.index');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
 // Routes pour utilisateurs connectés
 Route::middleware('auth')->group(function () {
     // Profils utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 });
 
 // Routes réservées aux administrateurs uniquement
 Route::middleware(['auth', 'admin'])->group(function () {
-
+    // Gestion des utilisateurs
     Route::get('/admin/users/create', [ProfileController::class, 'create'])->name('admin.users.create');
     Route::post('/admin/users', [ProfileController::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users', [ProfileController::class, 'adminIndex'])->name('admin.users');
+    Route::patch('/admin/users/{user}/role', [ProfileController::class, 'updateRole'])->name('admin.users.role');
+    
     // Gestion des actualités (CRUD complet pour admin)
     Route::get('/admin/news/create', [NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/admin/news', [NewsController::class, 'store'])->name('admin.news.store');
@@ -53,9 +58,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/faqs/{faq}', [FAQController::class, 'update'])->name('admin.faqs.update');
     Route::delete('/admin/faqs/{faq}', [FAQController::class, 'destroy'])->name('admin.faqs.destroy');
     
-    // Gestion des utilisateurs
-    Route::get('/admin/users', [ProfileController::class, 'adminIndex'])->name('admin.users');
-    Route::patch('/admin/users/{user}/role', [ProfileController::class, 'updateRole'])->name('admin.users.role');
+    // Gestion des catégories FAQ
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     
     // Messages de contact reçus
     Route::get('/admin/contacts', [ContactController::class, 'adminIndex'])->name('admin.contacts');

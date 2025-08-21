@@ -24,6 +24,8 @@
     <x-nav-link :href="route('faqs.index')" :active="request()->routeIs('faqs.*')">
         {{ __('FAQ') }}
     </x-nav-link>
+
+    
     
     <x-nav-link :href="route('contact.create')" :active="request()->routeIs('contact.*')">
         {{ __('Contact') }}
@@ -62,6 +64,7 @@
                     <a href="{{ route('admin.news.create') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Ajouter Actualité</a>
                     <a href="{{ route('admin.contacts') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Messages Contact</a>
                     <a href="{{ route('admin.users') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Gérer Utilisateurs</a>
+                    <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Gérer Catégories</a>
                 </div>
             </div>
         </div>

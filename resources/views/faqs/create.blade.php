@@ -11,6 +11,22 @@
                 <div class="p-6">
                     <form action="{{ route('admin.faqs.store') }}" method="POST">
                         @csrf
+                        
+                        <!-- Déplace le sélecteur de catégorie ICI, dans le formulaire -->
+                        <div class="mb-4">
+                            <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Catégorie</label>
+                            <select name="category_id" id="category_id" required 
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="">Sélectionner une catégorie</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->nom }}</option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
                         <div class="mb-4">
                             <label for="vraag" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question</label>
                             <input type="text" name="vraag" id="vraag" required 
@@ -24,27 +40,26 @@
                         </div>
                         
                         <div class="flex justify-between mt-6">
-                <a href="{{ route('faqs.index') }}" 
-                style="background-color: #6b7280; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">
-                    Annuler
-                </a>
-                <button type="submit" 
-                        style="background-color: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                    Ajouter la FAQ
-                </button>
-            </div>
-                        <div class="mt-4">
-                            @if ($errors->any())
-                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                                    <strong class="font-bold">Erreur!</strong>
-                                    <ul class="list-disc pl-5">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                            <a href="{{ route('faqs.index') }}" 
+                               style="background-color: #6b7280; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                                Annuler
+                            </a>
+                            <button type="submit" 
+                                    style="background-color: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                Ajouter la FAQ
+                            </button>
                         </div>
+                        
+                        @if ($errors->any())
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
+                                <strong class="font-bold">Erreur!</strong>
+                                <ul class="list-disc pl-5">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>

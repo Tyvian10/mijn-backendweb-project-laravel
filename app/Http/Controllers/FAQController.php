@@ -1,39 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Category;
 use App\Models\FAQ;
 use Illuminate\Http\Request;
 
 class FAQController extends Controller
 {
-    // Page publique des FAQ
     public function index()
     {
-        $faqs = FAQ::all();
-        return view('faqs.index', compact('faqs'));
+        $categories = Category::with('faqs')->get();
+        return view('faqs.index', compact('categories'));
     }
-
-    // Créer une FAQ (admin seulement)
+    
     public function create()
     {
-        return view('faqs.create');
+        $categories = Category::all();
+        return view('faqs.create', compact('categories'));
+        dd($categories); // Cela va afficher les catégories et arrêter l'exécution
     }
-
-    // Sauvegarder une FAQ (admin seulement)
+    
     public function store(Request $request)
     {
         $request->validate([
             'vraag' => 'required|string|max:255',
             'antwoord' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
         ]);
-
+    
         FAQ::create([
             'vraag' => $request->vraag,
             'antwoord' => $request->antwoord,
+            'category_id' => $request->category_id,
             'user_id' => auth()->id(),
         ]);
-
+    
         return redirect()->route('faqs.index')->with('success', 'FAQ ajoutée avec succès!');
     }
 
@@ -67,4 +68,6 @@ class FAQController extends Controller
         $faq->delete();
         return redirect()->route('faqs.index')->with('success', 'FAQ supprimée!');
     }
+
+    
 }
